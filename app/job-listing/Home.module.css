@@ -1,0 +1,151 @@
+
+.container {
+    min-height: 100vh;
+    padding: 0 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .title a {
+    color: #0070f3;
+    text-decoration: none;
+  }
+  
+  .title a:hover,
+  .title a:focus,
+  .title a:active {
+    text-decoration: underline;
+  }
+  
+  .title {
+    margin: 0 0 1rem;
+    line-height: 1.15;
+    font-size: 3.6rem;
+  }
+  
+  .title {
+    text-align: center;
+  }
+  
+  .title,
+  .description {
+    text-align: center;
+  }
+  
+  .description {
+    line-height: 1.5;
+    font-size: 1.5rem;
+  }
+  
+  .grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  
+    max-width: 100vw;
+    margin-top: 3rem;
+  }
+  
+  .card {
+    margin: 1rem;
+    flex-basis: 45%;
+    padding: 1.5rem;
+    text-align: left;
+    color: inherit;
+    text-decoration: none;
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease;
+  }
+  
+  .card:hover,
+  .card:focus,
+  .card:active {
+    color: #0070f3;
+    border-color: #0070f3;
+  }
+  
+  .card h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+  }
+  
+  .card p {
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.5;
+  }
+  
+  .logo {
+    height: 1em;
+  }
+  
+  @media (max-width: 1200px) {
+    .grid {
+      width: 100%;
+      flex-direction: column;
+    }
+  }
+  
+  .container {
+    padding: 20px;
+  }
+  
+  .main {
+    max-width: 1200px;
+    margin: 0 auto; /* Center the main content */
+  }
+  
+  .grid {
+    display: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    row-gap: 50px; /* Use a smaller gap for equal spacing */
+    column-gap: 135px;
+    width: 100%; /* Make the grid full width */
+    justify-items: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+  }
+  
+  .jobBox {
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    text-align: center; /* Center text within the box */
+    background-color: #f9f9f9; /* Light background for boxes */
+    border-radius: 12px; /* Rounded corners */
+    border: 10px solid #b1cccc;
+    padding: 16px; /* Inner padding */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: transform 0.2s;
+    width: 100%; /* Allow boxes to fill the available space */
+    width: 400px; /* Set a maximum width for the boxes */
+    height: 300px; /* Allow height to adapt based on content */
+  }
+  
+  .jobBox:hover {
+    transform: translateY(-8px); /* Lift effect on hover */
+  }
+  
+  .innerGrid {
+    display: grid; /* Enable grid layout */
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Adjust min width as needed */
+    gap: 10px; /* Gap between inner boxes */
+    margin-top: 10px; /* Optional: space above the inner grid */
+  }
+  
+  .innerBox {
+    background-color: #f7f5f5; /* Background color for inner boxes */
+    border:2px solid #bbdddd ; /* Border for inner boxes */
+    border-radius: 40px; /* Rounded corners */
+    padding: 8px; /* Inner padding */
+    text-align: center; /* Center text in inner boxes */
+  }
+  .innerBox:hover {
+    background-color: #bbdddd52;
+  }
