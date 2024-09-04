@@ -1,7 +1,5 @@
-// components/SearchBar.js
 import { useState } from 'react';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
