@@ -20,7 +20,7 @@ const SignIn = () => {
       console.log(user);
       setEmail(''); 
       setPassword('');
-      // return router.push('/');
+      return router.push('/job-listing');
     } catch (error) {
       toast.error("Sign in failed! Invalid password or username. Try again.");
       console.log(error.message);
