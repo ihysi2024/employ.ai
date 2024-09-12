@@ -21,7 +21,8 @@ dotenv.config();
 export default function Home() {  
   const [jobDetails, setJobDetails] = useState('');
   const [responseJson, setResponseJson] = useState(null);
-  
+  const appId = 'bf7edbad';
+  const apiKey = '98453db8965f7fb6f8c9b463ff727c7d';
   const apiUrl = 'https://api.adzuna.com/v1/api/jobs/us/search/1';
   const params = {
     app_id: appId,
