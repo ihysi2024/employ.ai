@@ -7,7 +7,7 @@ import path from 'path';
 
 dotenv.config();
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY });
 
 export const config = {
   api: {
@@ -17,10 +17,12 @@ export const config = {
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
+    
     try {
       const form = new IncomingForm();
       const uploadDir = path.join(process.cwd(), '/uploads');
 
+      console.log('Upload directory:', uploadDir);
       // Create the uploads directory if it doesn't exist
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir);
@@ -33,6 +35,7 @@ export default async function handler(req, res) {
       const data = await new Promise((resolve, reject) => {
         form.parse(req, (err, fields, files) => {
           if (err) {
+            console.error('*** IN PROMISE *** Error parsing form data:', err);
             reject(err);
           } else {
             resolve({ fields, files });
@@ -65,13 +68,25 @@ export default async function handler(req, res) {
         messages: [
           {
             role: 'user',
-            content: `Analyze this text: ${extractedText}`,
+            content: `Return a list of job positions that someone could apply for based on the experiences and skill in this resume. 
+            Return the list with the positions separated by a comma. after each comma, start a new line. ${extractedText}`,
+          },
+        ],
+      });
+      const response2 = await openai.chat.completions.create({
+        model: 'gpt-4',
+        messages: [
+          {
+            role: 'user',
+            content: `Return a keyword or phrase representing an industry someone could go into based on the experiences and skills in this reusme.
+            For example, Cloud Computing or Biomedical Devices ${extractedText}`,
           },
         ],
       });
 
       // Send the response back to the frontend
-      res.status(200).json({ text: response.choices[0].message.content });
+      res.status(200).json({ text: [response.choices[0].message.content, response2.choices[0].message.content]});
+      // res.status(200).json({ text: response2.choices[0].message.content });
     } catch (error) {
       console.error('Error processing request:', error);
       res.status(500).json({ error: 'Failed to process the PDF' });
