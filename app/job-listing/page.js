@@ -2,11 +2,12 @@
 import Head from 'next/head';
 import styles from './Home.module.css';
 import React, { useState, useEffect } from 'react';
-import SearchBar from './SearchBar';
 import '@fontsource/poppins'; // Import the Poppins font
 import PersonIcon from '@mui/icons-material/People';
 import * as dotenv from 'dotenv';
 import { OpenAI } from 'openai';
+import { useSearchParams } from 'next/navigation'
+
 
 /**
  * IDEAS:
@@ -18,20 +19,40 @@ import { OpenAI } from 'openai';
 dotenv.config();
 
 
-export default function Home() {  
+export default function JobListing() {
   const [jobDetails, setJobDetails] = useState('');
   const [responseJson, setResponseJson] = useState(null);
-  const appId = 'bf7edbad';
-  const apiKey = '98453db8965f7fb6f8c9b463ff727c7d';
+  const searchParams = useSearchParams()
+  const positions = searchParams.get('positions').split(",")
+  const location = searchParams.get('loc') || 'New York'
+  const salary = parseInt(searchParams.get('sal'))
+
+  console.log(positions, location, salary);
+  
   const apiUrl = 'https://api.adzuna.com/v1/api/jobs/us/search/1';
+
+  console.log(positions[0])
+  const paramsList = positions.map(position => ({
+    app_id: appId,
+    app_key: apiKey,
+    results_per_page: 10,
+    what: positions[0], // Use the current position from the map
+    where: location,
+    sort_by: 'date',
+  }));
+
   const params = {
     app_id: appId,
     app_key: apiKey,
     results_per_page: 10,
-    what: 'software engineer',
-    where: 'San Francisco',
+    what: positions[0], // Use the current position from the map
+    where: location,
     sort_by: 'date',
-  };
+  }
+  
+  const urlsToFetch = paramsList.map(params => `${apiUrl}?${new URLSearchParams(params)}`)
+
+  
   const characterLimit = 40;
   const truncateTitle = (title, limit) => {
     return title.length > limit ? title.slice(0, limit) + '...' : title;
@@ -63,6 +84,12 @@ export default function Home() {
     fetchJobData();
   }, []);
   
+  const handleSearch = (query) => {
+    // Perform search logic here based on the query
+    console.log('Search query:', query);
+    // You may want to update the API call with the search term
+  };
+
 
   return (
     <div style={{ backgroundColor: 'white' }}>
@@ -70,7 +97,6 @@ export default function Home() {
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
       <h1 style={{ marginRight: '20px', fontWeight: 'bold', fontSize: '20px' }}>Job Listings</h1>
     </div>
-
     <main className={styles.main}>
       <div className={styles.grid} style={{ justifyContent: 'center', alignItems: 'center', width: '100%' }}>
         {responseJson ? (
