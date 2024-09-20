@@ -7,7 +7,7 @@ import PersonIcon from '@mui/icons-material/People';
 import * as dotenv from 'dotenv';
 import { OpenAI } from 'openai';
 import { useSearchParams } from 'next/navigation'
-
+import SearchBar from './SearchBar';
 
 /**
  * IDEAS:
@@ -26,12 +26,9 @@ export default function JobListing() {
   const positions = searchParams.get('positions').split(",")
   const location = searchParams.get('loc') || 'New York'
   const salary = parseInt(searchParams.get('sal'))
-
-  console.log(positions, location, salary);
-  
   const apiUrl = 'https://api.adzuna.com/v1/api/jobs/us/search/1';
 
-  console.log(positions[0])
+  
   const paramsList = positions.map(position => ({
     app_id: appId,
     app_key: apiKey,
@@ -44,7 +41,7 @@ export default function JobListing() {
   const params = {
     app_id: appId,
     app_key: apiKey,
-    results_per_page: 10,
+    results_per_page: 20,
     what: positions[0], // Use the current position from the map
     where: location,
     sort_by: 'date',
@@ -56,6 +53,25 @@ export default function JobListing() {
   const characterLimit = 40;
   const truncateTitle = (title, limit) => {
     return title.length > limit ? title.slice(0, limit) + '...' : title;
+  };
+  
+  const handleSearch = (query) => {
+    // If the query is empty, reset to the original job listings
+    if (!query) {
+      fetch(`${apiUrl}?${new URLSearchParams(params)}`)
+        .then(response => response.json())
+        .then(data => setResponseJson(data))
+        .catch(error => console.error('Error:', error));
+      return;
+    }
+  
+    // Filter jobs based on the titles that include the search query
+    const filteredJobs = responseJson.results.filter(job =>
+      job.title.toLowerCase().includes(query.toLowerCase())
+    );
+  
+    // Update state with filtered results
+    setResponseJson(prev => ({ ...prev, results: filteredJobs }));
   };
   
 
@@ -71,31 +87,36 @@ export default function JobListing() {
       try {
         const response = await fetch(`${apiUrl}?${new URLSearchParams(params)}`);
         const data = await response.json();
-        const jobsWithExperience = await Promise.all(data.results.map(async (job) => {
+        
+        // Filter jobs based on salary after fetching
+        const filteredJobs = await Promise.all(data.results.map(async (job) => {
           const experience = await fetchJobDescription(job.redirect_url);
-          return { ...job, experience }; // Add the experience to each job
+          // Include only jobs that meet the salary requirement
+          if (job.min_salary >= salary) {
+            return { ...job, experience }; // Add the experience to each job
+          }
+          return null; // Return null for jobs that don't meet the salary requirement
         }));
-        setResponseJson({ ...data, results: jobsWithExperience }); // Update state with jobs
+
+        // Remove null values from the filtered jobs
+        const validJobs = filteredJobs.filter(job => job !== null);
+
+        setResponseJson({ ...data, results: validJobs }); // Update state with filtered jobs
       } catch (error) {
         console.error('Error:', error);
       }
     };
-  
+
     fetchJobData();
-  }, []);
+  }, [params, salary]); // Add salary as a dependency to refetch when it changes
+
   
-  const handleSearch = (query) => {
-    // Perform search logic here based on the query
-    console.log('Search query:', query);
-    // You may want to update the API call with the search term
-  };
-
-
   return (
     <div style={{ backgroundColor: 'white' }}>
   <div className={styles.container} style={{ fontFamily: 'Poppins, sans-serif' }}>
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
       <h1 style={{ marginRight: '20px', fontWeight: 'bold', fontSize: '20px' }}>Job Listings</h1>
+      <SearchBar onSearch={handleSearch}/> 
     </div>
     <main className={styles.main}>
       <div className={styles.grid} style={{ justifyContent: 'center', alignItems: 'center', width: '100%' }}>

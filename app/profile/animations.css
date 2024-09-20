@@ -1,0 +1,42 @@
+/* animations.css */
+
+/* Fade and Slide from the Left for the Text */
+@keyframes fadeInSlideLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  /* Scale Up and Fade for Input Boxes */
+  @keyframes scaleInFade {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* Add animation class for text */
+  .text-fade-in-slide {
+    animation: fadeInSlideLeft 1s ease-out forwards;
+  }
+  
+  /* Add animation class for input boxes */
+  .input-scale-in {
+    animation: scaleInFade 1s ease-out forwards;
+  }
+  
+  /* Slight hover effect for input boxes */
+  .input-scale-in:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+  }
+  

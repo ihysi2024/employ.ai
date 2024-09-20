@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'; // Adjust according to the arrow style you want
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
@@ -24,7 +25,13 @@ const SearchBar = ({ onSearch }) => {
         style={{ padding: '8px', width: '700px', height: '40px', borderRadius: '50px', border: '1px solid #ccc', fontFamily: 'Poppins, sans-serif', fontSize: '16px' }}
       />
     <button variant="contained" style={{ backgroundColor: '#b1cccc', border: '1px solid #b1cccc' , borderRadius: '50%', width: '40px', height: '40px', marginLeft: '10px', cursor: 'pointer' }}>
-        <ArrowForwardIcon style={{ fontSize: '24px' }}>add</ArrowForwardIcon>
+    <FontAwesomeIcon
+        icon={faArrowRight}
+        style={{
+            color: 'white', // Change arrow color to white
+            fontSize: '2rem', // Scale the arrow size
+        }}
+    />
     </button>
     </form>
   );

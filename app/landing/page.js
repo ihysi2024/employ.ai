@@ -47,7 +47,7 @@ export default function LandingPage() {
             backgroundColor: '#eeeeee',
             position: 'absolute',
             right: 0, // Position at the right
-            top: -380,
+            top: -450,
             transform: 'scale(3)', // Scale the circle to make it large
             transform: 'translateX(50%)', // Shift to the left to show the left hemisphere
           }}
